@@ -1,0 +1,61 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.card {
+
+    margin-bottom: 2rem;
+
+    .card-header {
+        font-size: .9rem;
+        padding: $card-spacer-y $card-spacer-x;
+
+        &--button {
+            padding: .594rem .05rem;
+        }
+
+        .btn-card {
+            border: 0px;
+            border-color: #E6E6E6;
+            border-style: solid;
+            height: 100%;
+
+            transition: all 100ms ease-in-out;
+            margin-top: -$card-spacer-y;
+            margin-bottom: -$card-spacer-y;
+            padding: $card-spacer-y $card-spacer-x;
+
+            &.btn-card-right {
+                border-left-width: 1px;
+                margin-right: -$card-spacer-x;
+                border-radius:0 $border-radius 0 0;
+            }
+
+
+            &:hover, &:active, &:focus {
+                text-decoration: none;
+                transition: all 100ms ease-in-out;
+            }
+
+            &.btn-default {
+                background: rgba(255, 255, 255, .3);
+
+                &:hover, &:active, &:focus {
+                    background: rgba(255,255,255, .7);
+                    color: $secondary;
+                }
+            }
+        }
+    }
+}
