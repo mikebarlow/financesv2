@@ -22,7 +22,8 @@ class CreateTemplateOwners extends Migration
         Schema::table('budget_user', function (Blueprint $table) {
             $table->foreign('budget_id')
                 ->references('id')
-                ->on('budgets');
+                ->on('budgets')
+                ->onDelete('cascade');
 
             $table->foreign('user_id')
                 ->references('id')

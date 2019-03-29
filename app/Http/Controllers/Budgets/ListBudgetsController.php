@@ -18,7 +18,7 @@ class ListBudgetsController extends Controller
         return view(
             'budgets.list',
             [
-                'budgets' => Budget::orderBy('name', 'asc')->get(),
+                'budgets' => $request->user()->budgets()->orderBy('name', 'asc')->get(),
             ]
         );
     }

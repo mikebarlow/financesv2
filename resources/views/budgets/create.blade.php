@@ -9,12 +9,14 @@
                     <div class="card-header">
                         <div class="pull-left d-inline-block">Create New Budget</div>
 
-                        <button class="btn-card btn-card-right btn-success float-right">
+                        <button class="btn-card btn-card-right btn-success float-right" @click.prevent="saveBudget">
                             Save
                         </button>
                     </div>
 
                     <div class="card-body">
+                        @include('alerts.main')
+
                         <form>
                             <div class="form-group">
                                 <label>Name</label>
@@ -34,7 +36,7 @@
                                         <td>@{{ row.name }}</td>
                                         <td>&pound;@{{ row.amount | currency(2) }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-danger btn-sm">
+                                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="deleteRow(key)">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -58,7 +60,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">&pound;</span>
                                         </div>
-                                        <input type="text" name="amount" class="form-control" v-model="newRow.amount" placeholder="100.50">
+                                        <input type="number" name="amount" class="form-control" v-model="newRow.amount" placeholder="100.50">
                                     </div>
                                 </div>
                                 <div class="form-group col-2">

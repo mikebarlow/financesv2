@@ -4,11 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col">
+            @include('alerts.main')
+
             <div class="card">
                 <div class="card-header">
                     <div class="pull-left d-inline-block">Account Budgets</div>
 
-                    <a href="{{ route('create-budget') }}" class="btn-card btn-card-right btn-default float-right">
+                    <a href="{{ route('budgets.create') }}" class="btn-card btn-card-right btn-primary float-right">
                         Create New Budget
                     </a>
                 </div>
@@ -26,8 +28,16 @@
                                 <tr>
                                     <td>{{ $budget->name }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-default">Edit</a>
-                                        <a href="#" class="btn btn-danger">Delete</a>
+                                        <a href="#" class="btn btn-primary">Edit</a>
+
+                                        <form class="form-inline" method="post" action="{{ route('budgets.delete', ['id' => $budget->id]) }}">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-danger">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty

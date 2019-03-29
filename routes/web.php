@@ -27,9 +27,12 @@ $router->group(
     ],
     function (Router $router) {
         $router->get('/budgets', Budgets\ListBudgetsController::class)
-            ->name('list-budgets');
+            ->name('budgets.list');
 
         $router->view('/budgets/create', 'budgets.create')
-            ->name('create-budget');
+            ->name('budgets.create');
+
+        $router->delete('/budgets/{id}', Budgets\DeleteBudgetController::class)
+            ->name('budgets.delete');
     }
 );

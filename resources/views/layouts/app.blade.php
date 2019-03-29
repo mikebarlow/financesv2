@@ -19,6 +19,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @routes
 </head>
 <body>
     <div id="app">
@@ -35,7 +37,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a href="{{ route('list-budgets') }}" class="nav-link">Budgets</a>
+                            <a href="{{ route('budgets.list') }}" class="nav-link">Budgets</a>
                         </li>
                     </ul>
 

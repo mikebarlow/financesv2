@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,12 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::name('api.')
+    ->middleware('auth:api')
+    ->group(
+        function (Router $router) {
+            $router->post('/budgets/create', Api\Budgets\CreateBudgetController::class)
+                ->name('budgets.create');
+        }
+    );
