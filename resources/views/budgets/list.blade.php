@@ -28,13 +28,13 @@
                                 <tr>
                                     <td>{{ $budget->name }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-primary">Edit</a>
+                                        <a href="{{ route('budgets.edit', ['id' => $budget->id]) }}" class="btn btn-primary pull-left mr-3">Edit</a>
 
-                                        <form class="form-inline" method="post" action="{{ route('budgets.delete', ['id' => $budget->id]) }}">
+                                        <form class="form-inline pull-left" method="post" action="{{ route('budgets.delete', ['id' => $budget->id]) }}">
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit" class="btn btn-danger">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you Sure?')">
                                                 Delete
                                             </button>
                                         </form>

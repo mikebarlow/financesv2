@@ -24,8 +24,6 @@ class DeleteBudgetController extends Controller
             $budget = Budget::where('id', $budgetId)
                 ->delete();
         } catch (\Exception $e) {
-            dd($e->getMessage());
-
             return back()
                 ->with('errorMsg', 'There was a problem deleting the budget');
         }

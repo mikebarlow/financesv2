@@ -49322,6 +49322,96 @@ if (token) {
 
 __webpack_require__(/*! ./new-budget */ "./resources/js/components/new-budget.js");
 
+__webpack_require__(/*! ./edit-budget */ "./resources/js/components/edit-budget.js");
+
+/***/ }),
+
+/***/ "./resources/js/components/edit-budget.js":
+/*!************************************************!*\
+  !*** ./resources/js/components/edit-budget.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+Vue.component('edit-budget', {
+  props: ['budgetid'],
+  mixins: [__webpack_require__(/*! ./../mixins/alerts */ "./resources/js/mixins/alerts.js"), __webpack_require__(/*! ./../mixins/processing */ "./resources/js/mixins/processing.js")],
+  data: function data() {
+    return {
+      budget: {
+        name: '',
+        rows: []
+      },
+      newRow: {
+        name: '',
+        amount: ''
+      }
+    };
+  },
+  created: function created() {
+    this.getBudget();
+  },
+  methods: {
+    getBudget: function getBudget() {
+      var _this = this;
+
+      var parent = this;
+      axios.get(route('api.budgets.get', {
+        id: this.budgetid
+      })).then(function (response) {
+        if (response.status == 200) {
+          _this.budget = response.data.budget;
+        } else {
+          parent.dangerAlert('There was a problem loading the budget');
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the budget');
+      });
+    },
+    addRow: function addRow() {
+      if (this.newRow.name != '' && this.newRow.amount > 0) {
+        this.budget.rows.push(this.newRow);
+        this.newRow = {
+          name: '',
+          amount: ''
+        };
+      } else {
+        this.dangerAlert('Both label and amount are required');
+      }
+    },
+    saveBudget: function saveBudget(event) {
+      var _this2 = this;
+
+      this.processing($(event.target), true);
+      var parent = this;
+      var formData = {
+        budget: this.budget
+      };
+      axios.post(route('api.budgets.update', {
+        id: this.budgetid
+      }), JSON.parse(JSON.stringify(formData))).then(function (response) {
+        if (response.status === 200) {
+          parent.successAlert(response.data.msg);
+          setTimeout(function () {
+            window.location = response.data.redirect;
+          }, 2000);
+        } else {
+          _this2.stopProcessing($(event.target));
+
+          parent.dangerAlert(response.data.error[0]);
+        }
+      }, function (error) {
+        _this2.stopProcessing($(event.target));
+
+        parent.dangerAlert('There was a problem saving the budget, please make sure all fields are filled in');
+      });
+    },
+    deleteRow: function deleteRow(key) {
+      this.budget.rows.splice(key, 1);
+    }
+  }
+});
+
 /***/ }),
 
 /***/ "./resources/js/components/new-budget.js":

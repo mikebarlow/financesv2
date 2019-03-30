@@ -24,5 +24,11 @@ Route::name('api.')
         function (Router $router) {
             $router->post('/budgets/create', Api\Budgets\CreateBudgetController::class)
                 ->name('budgets.create');
+
+            $router->get('/budgets/{id}', Api\Budgets\GetBudgetController::class)
+                ->name('budgets.get');
+
+            $router->post('/budgets/{id}', Api\Budgets\UpdateBudgetController::class)
+                ->name('budgets.update');
         }
     );

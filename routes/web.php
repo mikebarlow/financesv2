@@ -34,5 +34,8 @@ $router->group(
 
         $router->delete('/budgets/{id}', Budgets\DeleteBudgetController::class)
             ->name('budgets.delete');
+
+        $router->get('/budgets/{id}/edit', Budgets\EditBudgetController::class)
+            ->name('budgets.edit');
     }
 );
