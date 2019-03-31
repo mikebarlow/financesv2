@@ -12,7 +12,18 @@ Vue.component('new-budget', {
             newRow: {
                 name: '',
                 amount: ''
+            },
+            total: 0
+        }
+    },
+    watch: {
+        "budget.rows": function(rows) {
+            var total = 0;
+
+            for (var key in rows) {
+                total += parseFloat(rows[key].amount.replace(/,/g, ''));
             }
+            this.total = total;
         }
     },
 
@@ -20,6 +31,7 @@ Vue.component('new-budget', {
         addRow: function () {
             if (this.newRow.name != '' && this.newRow.amount > 0) {
                 this.budget.rows.push(this.newRow);
+
                 this.newRow = {
                     name: '',
                     amount: ''

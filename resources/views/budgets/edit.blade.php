@@ -41,6 +41,10 @@
                                             </button>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td colspan="2">&pound;@{{ total | currency(2) }}</td>
+                                    </tr>
                                 </tbody>
                                 <tbody v-else>
                                     <tr>

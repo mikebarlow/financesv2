@@ -13,7 +13,18 @@ Vue.component('edit-budget', {
             newRow: {
                 name: '',
                 amount: ''
+            },
+            total: 0
+        }
+    },
+    watch: {
+        "budget.rows": function(rows) {
+            var total = 0;
+
+            for (var key in rows) {
+                total += parseFloat(rows[key].amount.replace(/,/g, ''));
             }
+            this.total = total;
         }
     },
     created: function() {
