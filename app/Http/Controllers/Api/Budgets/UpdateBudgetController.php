@@ -3,12 +3,23 @@
 namespace App\Http\Controllers\Api\Budgets;
 
 use App\Budget;
+use App\Money\Parser;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBudgetRequest;
 
 class UpdateBudgetController extends Controller
 {
+    protected $moneyParser;
+
+    /**
+     * @param Parser $money
+     */
+    public function __construct(Parser $money)
+    {
+        $this->moneyParser = $money;
+    }
+
     /**
      * @param UpdateBudgetRequest $request
      * @param int $budgetId
@@ -23,7 +34,21 @@ class UpdateBudgetController extends Controller
             ->first();
 
         $budget->name = $data['name'];
-        $budget->sheet_rows = \GuzzleHttp\json_encode($data['rows']);
+
+        $rows = collect($data['rows'])
+            ->map(
+                function ($row) {
+                    $row['amount'] = $this->moneyParser
+                        ->convertToMoney($row['amount'])
+                        ->getAmount();
+
+                    return $row;
+                }
+            )
+            ->toArray();
+
+
+        $budget->sheet_rows = \GuzzleHttp\json_encode($rows);
 
         try {
             $budget->save();
