@@ -9,8 +9,6 @@ use App\Http\Controllers\Controller;
 class ListBudgetsController extends Controller
 {
     /**
-     * @todo restrict budgets
-     *
      * @param Request $request
      */
     public function __invoke(Request $request)

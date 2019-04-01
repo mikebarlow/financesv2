@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSheets extends Migration
+class CreateAccounts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,17 @@ class CreateSheets extends Migration
      */
     public function up()
     {
-        Schema::create('sheets', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->string('name');
+            $table->unsignedBigInteger('budget_id');
 
             $table->timestamps();
+
+            $table->foreign('budget_id')
+                ->references('id')
+                ->on('budgets')
+                ->onDelete('cascade');
         });
     }
 
@@ -29,6 +34,6 @@ class CreateSheets extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sheets');
+        Schema::dropIfExists('accounts');
     }
 }

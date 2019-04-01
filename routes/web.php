@@ -26,6 +26,8 @@ $router->group(
         'middleware' => ['auth',],
     ],
     function (Router $router) {
+        // --------------------
+        // budgets
         $router->get('/budgets', Budgets\ListBudgetsController::class)
             ->name('budgets.list');
 
@@ -37,5 +39,16 @@ $router->group(
 
         $router->get('/budgets/{id}/edit', Budgets\EditBudgetController::class)
             ->name('budgets.edit');
+
+        // --------------------
+        // accounts
+        $router->get('/accounts', Accounts\ListAccountsController::class)
+            ->name('accounts.list');
+
+        $router->get('/accounts/create', Accounts\CreateAccountFormController::class)
+            ->name('accounts.create');
+
+        $router->post('/accounts/create', Accounts\CreateAccountController::class)
+            ->name('accounts.create.post');
     }
 );

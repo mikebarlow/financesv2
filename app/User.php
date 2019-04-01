@@ -40,6 +40,11 @@ class User extends Authenticatable
 
     public function budgets()
     {
-        return $this->belongsToMany(\App\Budget::class);
+        return $this->belongsToMany(Budget::class);
+    }
+
+    public function accounts()
+    {
+        return $this->belongsToMany(Account::class);
     }
 }

@@ -12,9 +12,9 @@ class Sheet extends Model
         'budget_id',
     ];
 
-    public function budget()
+    public function account()
     {
-        return $this->belongsTo(Budget::class);
+        return $this->belongsTo(Account::class);
     }
 
     public function sheetRows()
