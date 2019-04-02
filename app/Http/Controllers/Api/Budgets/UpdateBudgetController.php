@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Budgets;
 
 use App\Budget;
 use App\Money\Parser;
+use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBudgetRequest;
@@ -41,6 +42,10 @@ class UpdateBudgetController extends Controller
                     $row['amount'] = $this->moneyParser
                         ->convertToMoney($row['amount'])
                         ->getAmount();
+
+                    if (empty($row['id'])) {
+                        $row['id'] = Str::uuid();
+                    }
 
                     return $row;
                 }
