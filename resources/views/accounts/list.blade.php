@@ -20,29 +20,26 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Latest Sheet</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($accounts as $account)
                                 <tr>
-                                    <td>{{ $budget->name }}</td>
+                                    <td>{{ $account->name }}</td>
+                                    <td>--</td>
                                     <td>
-                                        <a href="{{ route('budgets.edit', ['id' => $budget->id]) }}" class="btn btn-primary pull-left mr-3">Edit</a>
-
-                                        <form class="form-inline pull-left" method="post" action="{{ route('budgets.delete', ['id' => $budget->id]) }}">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you Sure?')">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        @if ($account->latestSheet !== null)
+                                            <a href="{{ route('accounts.view', ['id' => $account->id]) }}" class="btn btn-success pull-left mr-3">View</a>
+                                        @else
+                                            <a href="{{ route('accounts.start', ['id' => $account->id]) }}" class="btn btn-info pull-left mr-3">Start</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="3">
                                         You have no accounts created.
                                     </td>
                                 </tr>

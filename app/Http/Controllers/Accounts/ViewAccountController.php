@@ -6,7 +6,7 @@ use App\Account;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ListAccountsController extends Controller
+class ViewAccountController extends Controller
 {
     /**
      *
@@ -19,10 +19,7 @@ class ListAccountsController extends Controller
             [
                 'accounts' => $request->user()
                     ->accounts()
-                    ->with([
-                        'budget',
-                        'latestSheet',
-                    ])
+                    ->with('budget')
                     ->orderBy('name', 'asc')
                     ->get(),
             ]

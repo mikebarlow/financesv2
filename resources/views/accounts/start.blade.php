@@ -9,10 +9,10 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <div class="pull-left d-inline-block">Create New Account</div>
+                        <div class="pull-left d-inline-block">Start "{{ $account->name }}"</div>
 
                         <button type="submit" class="btn-card btn-card-right btn-success float-right">
-                            Save
+                            Start
                         </button>
                     </div>
 
@@ -24,15 +24,7 @@
                             <input type="text" name="name" class="form-control">
                         </div>
 
-                        <div class="form-group">
-                            <label>Budget</label>
-                            <select name="budget_id" class="form-control">
-                                <option>Select Budget</option>
-                                @foreach ($budgets as $budget)
-                                    <option value="{{ $budget->id }}">{{ $budget->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
                     </div>
                 </div>
             </form>

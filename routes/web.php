@@ -50,5 +50,11 @@ $router->group(
 
         $router->post('/accounts/create', Accounts\CreateAccountController::class)
             ->name('accounts.create.post');
+
+        $router->get('/accounts/{id}', Accounts\ViewAccountController::class)
+            ->name('accounts.view');
+
+        $router->get('/accounts/{id}/start', Accounts\StartAccountController::class)
+            ->name('accounts.start');
     }
 );
