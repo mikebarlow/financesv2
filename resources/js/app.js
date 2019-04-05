@@ -30,6 +30,9 @@ Vue.filter('currency', function(val, dec){
     return accountingJs.formatNumber(val, dec)
 });
 
+// add the ziggy route method to Vue
+Vue.prototype.route = route;
+
 const app = new Vue({
     el: '#app'
 });

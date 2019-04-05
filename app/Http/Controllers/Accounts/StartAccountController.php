@@ -16,8 +16,7 @@ class StartAccountController extends Controller
      */
     public function __invoke(Request $request, int $id)
     {
-        $account = Account::with('budget')
-            ->where('id', $id)
+        $account = Account::where('id', $id)
             ->whereHas(
                 'users',
                 function ($query) use ($request) {
@@ -28,8 +27,7 @@ class StartAccountController extends Controller
         return view(
             'accounts.start',
             [
-                'account' => $account,
-                'budget'  => Budget::outputRows($account->budget->sheet_rows),
+                'account' => $account
             ]
         );
     }

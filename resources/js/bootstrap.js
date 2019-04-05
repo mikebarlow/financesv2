@@ -11,6 +11,10 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
+    // travito amend for tooltip issues
+    // https://stackoverflow.com/a/17920819/4681832
+    require('jquery-ui-bundle');
+
     require('bootstrap');
 } catch (e) {}
 

@@ -22,6 +22,8 @@ Route::name('api.')
     ->middleware('auth:api')
     ->group(
         function (Router $router) {
+            // --------------------
+            // budgets
             $router->post('/budgets/create', Api\Budgets\CreateBudgetController::class)
                 ->name('budgets.create');
 
@@ -30,5 +32,11 @@ Route::name('api.')
 
             $router->post('/budgets/{id}', Api\Budgets\UpdateBudgetController::class)
                 ->name('budgets.update');
+
+
+            // --------------------
+            // accounts
+            $router->get('/accounts/{id}', Api\Accounts\GetAccountController::class)
+                ->name('accounts.get');
         }
     );

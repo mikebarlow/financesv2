@@ -27,13 +27,19 @@ class BudgetResource extends JsonResource
         );
 
         $budget['rows'] = $rows
-            ->map(
+            ->mapWithKeys(
                 function ($row) use ($parser) {
                     $row['amount'] = $parser->moneyToOutput(
                         Money::GBP($row['amount'])
                     );
+                    $row['name'] = ucfirst($row['name']);
 
-                    return $row;
+                    return [$row['id'] => $row];
+                }
+            )
+            ->sortBy(
+                function ($item, $key) {
+                    return $item['name'];
                 }
             )
             ->toArray();
