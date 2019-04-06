@@ -38,5 +38,11 @@ Route::name('api.')
             // accounts
             $router->get('/accounts/{id}', Api\Accounts\GetAccountController::class)
                 ->name('accounts.get');
+
+            // --------------------
+            // sheets
+            $router->post('/sheets', Api\Sheets\CreateSheetController::class)
+                ->name('sheets.create');
+
         }
     );

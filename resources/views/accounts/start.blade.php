@@ -7,9 +7,9 @@
             <start-sheet :accountid="{{ $account->id }}" inline-template>
                 <div class="card">
                     <div class="card-header">
-                        <div class="pull-left d-inline-block">Start "{{ $account->name }}"</div>
+                        <div class="pull-left d-inline-block">New sheet for {{ $account->name }}</div>
 
-                        <button type="submit" class="btn-card btn-card-right btn-success float-right">
+                        <button type="submit" class="btn-card btn-card-right btn-success float-right" @click.prevent="saveSheet">
                             Start
                         </button>
                     </div>
@@ -19,7 +19,7 @@
 
                         <div class="form-group">
                             <label>Sheet Starts On</label>
-                            <input type="text" name="sheet_start" class="form-control datepicker">
+                            <input type="text" name="sheet_start" class="form-control datepicker" v-model="start_date">
                         </div>
 
                         <table class="table table-striped">

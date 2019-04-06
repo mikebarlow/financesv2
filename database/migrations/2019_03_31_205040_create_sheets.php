@@ -16,7 +16,8 @@ class CreateSheets extends Migration
         Schema::create('sheets', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')
+                ->nullable();
             $table->unsignedBigInteger('account_id');
 
             $table->timestamps();

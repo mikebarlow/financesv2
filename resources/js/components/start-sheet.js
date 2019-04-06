@@ -7,9 +7,7 @@ Vue.component('start-sheet', {
     data: function () {
         return {
             account: {},
-            sheet: {
-                start: ''
-            },
+            start_date: '',
             rows: {},
             bfRows: {},
             budgettotal: 0,
@@ -48,10 +46,10 @@ Vue.component('start-sheet', {
             $('.datepicker').datepicker({
                 changeMonth: true,
                 changeYear: true,
-                dateFormat: 'dd/mm/yy',
+                dateFormat: 'yy-mm-dd',
                 firstDay: 1,
                 onClose: function (dateText, obj) {
-                    parent.$set(parent.sheet, 'start', dateText);
+                    parent.$set(parent, 'start_date', dateText);
                 }
             });
         });
@@ -81,5 +79,43 @@ Vue.component('start-sheet', {
                     }
                 );
         },
+
+        saveSheet: function (event) {
+            this.processing($(event.target), true);
+            var parent = this;
+
+            var formData = {
+                sheet: {
+                    account_id: this.accountid,
+                    start_date: this.start_date,
+                    budget: this.rows,
+                    brought_forward: this.bfRows
+                }
+            };
+
+            axios.post(
+                route('api.sheets.create'),
+                JSON.parse(JSON.stringify(formData))
+            )
+            .then(
+                (response) => {
+                    if (response.status === 201) {
+                        parent.successAlert(response.data.msg);
+
+                        setTimeout(function () {
+                            window.location = response.data.redirect
+                        }, 2000);
+
+                    } else {
+                        this.stopProcessing($(event.target));
+                        parent.dangerAlert(response.data.error[0]);
+                    }
+                },
+                (error) => {
+                    this.stopProcessing($(event.target));
+                    parent.dangerAlert('There was a problem creating the sheet.');
+                }
+            );
+        }
     }
 });

@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class SheetRow extends Model
 {
     protected $fillable = [
+        'budget_id',
         'label',
         'budget',
         'brought_forward',
         'payments',
-        'transfers_in',
-        'transfers_out',
+        'transfer_in',
+        'transfer_out',
     ];
 
     public function sheet()
