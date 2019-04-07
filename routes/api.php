@@ -49,5 +49,8 @@ Route::name('api.')
 
             $router->post('/sheets/payment', Api\Sheets\MakePaymentController::class)
                 ->name('sheets.payment');
+
+            $router->get('/sheets/{id}/transactions', Api\Sheets\GetTransactionsController::class)
+                ->name('sheets.transactions');
         }
     );
