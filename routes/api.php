@@ -39,10 +39,15 @@ Route::name('api.')
             $router->get('/accounts/{id}', Api\Accounts\GetAccountController::class)
                 ->name('accounts.get');
 
+            $router->get('/accounts/{id}/latest', Api\Accounts\GetLatestSheetController::class)
+                ->name('accounts.get.latest');
+
             // --------------------
             // sheets
             $router->post('/sheets', Api\Sheets\CreateSheetController::class)
                 ->name('sheets.create');
 
+            $router->post('/sheets/payment', Api\Sheets\MakePaymentController::class)
+                ->name('sheets.payment');
         }
     );

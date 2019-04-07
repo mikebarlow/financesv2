@@ -68069,6 +68069,8 @@ __webpack_require__(/*! ./edit-budget */ "./resources/js/components/edit-budget.
 
 __webpack_require__(/*! ./start-sheet */ "./resources/js/components/start-sheet.js");
 
+__webpack_require__(/*! ./view-sheet */ "./resources/js/components/view-sheet.js");
+
 /***/ }),
 
 /***/ "./resources/js/components/edit-budget.js":
@@ -68361,6 +68363,89 @@ Vue.component('start-sheet', {
         _this2.stopProcessing($(event.target));
 
         parent.dangerAlert('There was a problem creating the sheet.');
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/view-sheet.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/view-sheet.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+Vue.component('view-sheet', {
+  props: ['accountid'],
+  mixins: [__webpack_require__(/*! ./../mixins/alerts */ "./resources/js/mixins/alerts.js"), __webpack_require__(/*! ./../mixins/processing */ "./resources/js/mixins/processing.js")],
+  data: function data() {
+    return {
+      account: {
+        latest: {
+          rows: [],
+          totals: {}
+        }
+      },
+      defaults: {
+        payment: {
+          row: 0,
+          amount: 0.00
+        }
+      },
+      payment: {
+        row: 0,
+        amount: 0.00
+      }
+    };
+  },
+  created: function created() {
+    var parent = this;
+    this.getAccount();
+  },
+  methods: {
+    getAccount: function getAccount() {
+      var _this = this;
+
+      var parent = this;
+      axios.get(route('api.accounts.get.latest', {
+        id: this.accountid
+      })).then(function (response) {
+        if (response.status == 200) {
+          _this.account = response.data.account;
+        } else {
+          parent.dangerAlert('There was a problem loading the account');
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the account');
+      });
+    },
+    sendPayment: function sendPayment(event) {
+      var _this2 = this;
+
+      this.processing($(event.target), true);
+      var parent = this;
+      var formData = {
+        sheet_id: this.account.latest.id,
+        payment: this.payment
+      };
+      axios.post(route('api.sheets.payment'), JSON.parse(JSON.stringify(formData))).then(function (response) {
+        if (response.status === 201) {
+          _this2.payment = JSON.parse(JSON.stringify(_this2.defaults.payment));
+
+          _this2.getAccount();
+
+          _this2.stopProcessing($(event.target));
+        } else {
+          _this2.stopProcessing($(event.target));
+
+          parent.dangerAlert(response.data.error[0]);
+        }
+      }, function (error) {
+        _this2.stopProcessing($(event.target));
+
+        parent.dangerAlert('There was a problem logging the payment.');
       });
     }
   }

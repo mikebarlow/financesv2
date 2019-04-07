@@ -11,17 +11,23 @@ class ViewAccountController extends Controller
     /**
      *
      * @param Request $request
+     * @param int $accountId
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, int $id)
     {
+        $account = Account::with('latestSheet')
+            ->where('id', $id)
+            ->whereHas(
+                'users',
+                function ($query) use ($request) {
+                    $query->where('users.id', $request->user()->id);
+                }
+            )->first();
+
         return view(
-            'accounts.list',
+            'accounts.view',
             [
-                'accounts' => $request->user()
-                    ->accounts()
-                    ->with('budget')
-                    ->orderBy('name', 'asc')
-                    ->get(),
+                'account' => $account
             ]
         );
     }

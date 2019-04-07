@@ -12,6 +12,11 @@ class Sheet extends Model
         'budget_id',
     ];
 
+    protected $dates = [
+        'start_date',
+        'end_date',
+    ];
+
     public function account()
     {
         return $this->belongsTo(Account::class);
@@ -19,6 +24,7 @@ class Sheet extends Model
 
     public function sheetRows()
     {
-        return $this->hasMany(SheetRow::class);
+        return $this->hasMany(SheetRow::class)
+            ->orderBy('label', 'asc');
     }
 }

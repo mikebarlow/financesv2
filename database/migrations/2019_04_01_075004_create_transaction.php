@@ -13,15 +13,20 @@ class CreateTransaction extends Migration
      */
     public function up()
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('type');
+
             $table->unsignedBigInteger('from_row_id')
                 ->nullable();
-            $table->string('from_label');
+            $table->string('from_label')
+                ->nullable();
 
             $table->unsignedBigInteger('to_row_id')
                 ->nullable();
-            $table->string('to_label');
+            $table->string('to_label')
+                ->nullable();
+
             $table->string('amount');
 
             $table->timestamps();
@@ -43,6 +48,6 @@ class CreateTransaction extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction');
+        Schema::dropIfExists('transactions');
     }
 }

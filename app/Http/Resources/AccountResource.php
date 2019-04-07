@@ -14,9 +14,18 @@ class AccountResource extends JsonResource
      */
     public function toArray($request)
     {
-        $account = parent::toArray($request);
-        $account['budget'] = new BudgetResource($this->budget);
-
-        return $account;
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'budget_id' => $this->budget_id,
+            'budget' => $this->whenLoaded(
+                'budget',
+                new BudgetResource($this->budget)
+            ),
+            'latest' => $this->whenLoaded(
+                'latestSheet',
+                new SheetResource($this->latestSheet)
+            ),
+        ];
     }
 }
