@@ -68388,6 +68388,7 @@ Vue.component('view-sheet', {
           totals: {}
         }
       },
+      transactions: [],
       defaults: {
         payment: {
           row: 0,
@@ -68414,6 +68415,8 @@ Vue.component('view-sheet', {
       })).then(function (response) {
         if (response.status == 200) {
           _this.account = response.data.account;
+
+          _this.getTransactions();
         } else {
           parent.dangerAlert('There was a problem loading the account');
         }
@@ -68421,8 +68424,24 @@ Vue.component('view-sheet', {
         parent.dangerAlert('Something went wrong when attempting to load the account');
       });
     },
-    sendPayment: function sendPayment(event) {
+    getTransactions: function getTransactions() {
       var _this2 = this;
+
+      var parent = this;
+      axios.get(route('api.sheets.transactions', {
+        id: this.account.latest.id
+      })).then(function (response) {
+        if (response.status == 200) {
+          _this2.transactions = response.data.transactions;
+        } else {
+          parent.dangerAlert('There was a problem loading the transactions');
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the transactions');
+      });
+    },
+    sendPayment: function sendPayment(event) {
+      var _this3 = this;
 
       this.processing($(event.target), true);
       var parent = this;
@@ -68432,18 +68451,18 @@ Vue.component('view-sheet', {
       };
       axios.post(route('api.sheets.payment'), JSON.parse(JSON.stringify(formData))).then(function (response) {
         if (response.status === 201) {
-          _this2.payment = JSON.parse(JSON.stringify(_this2.defaults.payment));
+          _this3.payment = JSON.parse(JSON.stringify(_this3.defaults.payment));
 
-          _this2.getAccount();
+          _this3.getAccount();
 
-          _this2.stopProcessing($(event.target));
+          _this3.stopProcessing($(event.target));
         } else {
-          _this2.stopProcessing($(event.target));
+          _this3.stopProcessing($(event.target));
 
           parent.dangerAlert(response.data.error[0]);
         }
       }, function (error) {
-        _this2.stopProcessing($(event.target));
+        _this3.stopProcessing($(event.target));
 
         parent.dangerAlert('There was a problem logging the payment.');
       });

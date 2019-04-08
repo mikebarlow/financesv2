@@ -13,7 +13,7 @@
             @include('accounts.partial.multi-transfers')
         </div>
         <div class="row justify-content-center">
-            <div class="col-8">
+            <div class="col">
                 <div class="card">
                     <div class="card-header">
                         <div class="pull-left d-inline-block">
@@ -84,11 +84,20 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Transaction</th>
-                                    <th>Total</th>
+                                    <th>Amount</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                <tr v-for="transaction in transactions">
+                                    <td>@{{ transaction.label }}</td>
+                                    <td>&pound;@{{ transaction.amount }}</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-xs">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

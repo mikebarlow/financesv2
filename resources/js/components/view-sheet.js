@@ -12,6 +12,7 @@ Vue.component('view-sheet', {
                     totals: {}
                 }
             },
+            transactions: [],
             defaults: {
                 payment: {
                     row: 0,
@@ -38,12 +39,30 @@ Vue.component('view-sheet', {
                     (response) => {
                         if (response.status == 200) {
                             this.account = response.data.account;
+                            this.getTransactions();
                         } else {
                             parent.dangerAlert('There was a problem loading the account');
                         }
                     },
                     (error) => {
                         parent.dangerAlert('Something went wrong when attempting to load the account');
+                    }
+                );
+        },
+        getTransactions: function () {
+            var parent = this;
+
+            axios.get(route('api.sheets.transactions', {id: this.account.latest.id}))
+                .then(
+                    (response) => {
+                        if (response.status == 200) {
+                            this.transactions = response.data.transactions;
+                        } else {
+                            parent.dangerAlert('There was a problem loading the transactions');
+                        }
+                    },
+                    (error) => {
+                        parent.dangerAlert('Something went wrong when attempting to load the transactions');
                     }
                 );
         },

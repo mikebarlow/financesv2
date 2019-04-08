@@ -10714,3 +10714,8 @@ a.text-dark:focus {
   color: #6c757d;
 }
 
+.btn-xs {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+}
+
