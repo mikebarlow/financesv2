@@ -23,7 +23,7 @@ class MakePaymentController extends Controller
     }
 
     /**
-     * @param MakePaymentRequest
+     * @param MakePaymentRequest $request
      */
     public function __invoke(MakePaymentRequest $request)
     {
@@ -41,8 +41,6 @@ class MakePaymentController extends Controller
                 ])
                 ->setStatusCode(422);
         }
-
-        // @todo - create transaction
 
         try {
             DB::transaction(function () use ($row, $amount) {

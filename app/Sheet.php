@@ -27,4 +27,13 @@ class Sheet extends Model
         return $this->hasMany(SheetRow::class)
             ->orderBy('label', 'asc');
     }
+
+    /**
+     * @param Carbon\Carbon $endDate
+     */
+    public function complete($endDate)
+    {
+        $this->end_date = $endDate->toDateString();
+        $this->save();
+    }
 }

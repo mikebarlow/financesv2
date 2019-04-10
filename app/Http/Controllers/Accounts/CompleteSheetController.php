@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Accounts;
 
+use App\Budget;
 use App\Account;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ViewAccountController extends Controller
+class CompleteSheetController extends Controller
 {
     /**
      *
      * @param Request $request
-     * @param int $accountId
+     * @param int $id
      */
     public function __invoke(Request $request, int $id)
     {
-        $account = Account::with('latestSheet')
-            ->where('id', $id)
+        $account = Account::where('id', $id)
             ->whereHas(
                 'users',
                 function ($query) use ($request) {
@@ -24,20 +24,10 @@ class ViewAccountController extends Controller
                 }
             )->first();
 
-        $allAccounts = $request->user()
-            ->accounts()
-            ->with([
-                'budget',
-                'latestSheet',
-            ])
-            ->orderBy('name', 'asc')
-            ->get();
-
         return view(
-            'accounts.view',
+            'accounts.complete-sheet',
             [
-                'account' => $account,
-                'allAccounts' => $allAccounts,
+                'account' => $account
             ]
         );
     }

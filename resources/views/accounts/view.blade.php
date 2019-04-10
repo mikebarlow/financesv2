@@ -7,7 +7,7 @@
             @include('alerts.main')
         </div>
 
-        <div class="row justify-content-center">
+        <div class="row justify-content-center d-print-none">
             @include('accounts.partial.pay')
             @include('accounts.partial.transfer')
             @include('accounts.partial.multi-transfers')
@@ -19,6 +19,10 @@
                         <div class="pull-left d-inline-block">
                             Sheet Beginning: {{ $account->latestSheet->start_date->format('jS M Y') }}
                         </div>
+
+                        <button type="submit" class="d-print-none btn-card btn-card-right btn-danger float-right" onclick="javascript: window.print()">
+                            <i class="fa fa-print"></i> Print
+                        </button>
                     </div>
 
                     <div class="card-body p-0">
@@ -34,6 +38,15 @@
                                     <th>Total</th>
                                 </tr>
                             </thead>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <a href="{{ route('accounts.complete-sheet', ['id' => $account->id]) }}" onclick="return confirm('Are you sure');" class="d-print-none btn btn-success btn-block">
+                                            Complete Sheet
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tfoot>
                             <tbody v-if="account">
                                 <tr v-for="row in account.latest.rows">
                                     <th>@{{ row.label }}</th>
@@ -71,7 +84,7 @@
                 </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-4 d-print-none">
                 <div class="card">
                     <div class="card-header">
                         <div class="pull-left d-inline-block">
@@ -93,7 +106,7 @@
                                     <td>@{{ transaction.label }}</td>
                                     <td>&pound;@{{ transaction.amount }}</td>
                                     <td>
-                                        <button class="btn btn-danger btn-xs">
+                                        <button class="btn btn-danger btn-xs " @click.prevent="deleteTransaction($event, transaction.id)">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </td>

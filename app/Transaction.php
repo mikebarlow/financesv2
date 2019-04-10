@@ -38,4 +38,44 @@ class Transaction extends Model
         $transaction->amount = $money->getAmount();
         $transaction->save();
     }
+
+    /**
+     * @param SheetRow|string $from
+     * @param SheetRow|string $to
+     * @param Money $money
+     */
+    public static function transfer($from, $to, Money $money)
+    {
+        $transaction = new static;
+        $transaction->type = 'transfer';
+
+        $diffSheets = isset($from->sheet_id, $to->sheet_id) && $from->sheet_id !== $to->sheet_id;
+
+        if ($from instanceof SheetRow) {
+            $transaction->from_row_id = $from->id;
+
+            if ($diffSheets) {
+                $transaction->from_label = $from->sheet->account->name . ':' . $from->label;
+            } else {
+                $transaction->from_label = $from->label;
+            }
+        } else {
+            $transaction->from_label = $from;
+        }
+
+        if ($to instanceof SheetRow) {
+            $transaction->to_row_id = $to->id;
+
+            if ($diffSheets) {
+                $transaction->to_label = $to->sheet->account->name . ':' . $to->label;
+            } else {
+                $transaction->to_label = $to->label;
+            }
+        } else {
+            $transaction->to_label = $to;
+        }
+
+        $transaction->amount = $money->getAmount();
+        $transaction->save();
+    }
 }

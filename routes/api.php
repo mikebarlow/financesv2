@@ -44,13 +44,27 @@ Route::name('api.')
 
             // --------------------
             // sheets
+            $router->get('/sheets/{id}/rows', Api\Sheets\GetRowsController::class)
+                ->name('sheets.rows');
+
             $router->post('/sheets', Api\Sheets\CreateSheetController::class)
                 ->name('sheets.create');
 
             $router->post('/sheets/payment', Api\Sheets\MakePaymentController::class)
                 ->name('sheets.payment');
 
+            $router->post('/sheets/transfer', Api\Sheets\MakeTransferController::class)
+                ->name('sheets.transfer');
+
             $router->get('/sheets/{id}/transactions', Api\Sheets\GetTransactionsController::class)
                 ->name('sheets.transactions');
+
+            $router->post('/sheets/{id}/complete', Accounts\CompleteSheetController::class)
+                ->name('sheets.complete');
+
+            // --------------------
+            // transaction
+            $router->delete('/transactions/{id}', Api\Transactions\DeleteTransactionController::class)
+                ->name('transaction.delete');
         }
     );

@@ -34,4 +34,69 @@ class SheetRow extends Model
 
         $this->save();
     }
+
+    /**
+     * @param Money $amount
+     * @return void
+     */
+    public function refund(Money $amount)
+    {
+        $payments = Money::GBP($this->payments);
+
+        $this->payments = $payments->subtract($amount)->getAmount();
+
+        $this->save();
+    }
+
+    /**
+     * @param Money $amount
+     * @return void
+     */
+    public function transferOut(Money $amount)
+    {
+        $transOut = Money::GBP($this->transfer_out);
+
+        $this->transfer_out = $transOut->add($amount)->getAmount();
+
+        $this->save();
+    }
+
+    /**
+     * @param Money $amount
+     * @return void
+     */
+    public function undoTransferOut(Money $amount)
+    {
+        $transOut = Money::GBP($this->transfer_out);
+
+        $this->transfer_out = $transOut->subtract($amount)->getAmount();
+
+        $this->save();
+    }
+
+    /**
+     * @param Money $amount
+     * @return void
+     */
+    public function transferIn(Money $amount)
+    {
+        $transIn = Money::GBP($this->transfer_in);
+
+        $this->transfer_in = $transIn->add($amount)->getAmount();
+
+        $this->save();
+    }
+
+    /**
+     * @param Money $amount
+     * @return void
+     */
+    public function undoTransferIn(Money $amount)
+    {
+        $transIn = Money::GBP($this->transfer_in);
+
+        $this->transfer_in = $transIn->subtract($amount)->getAmount();
+
+        $this->save();
+    }
 }

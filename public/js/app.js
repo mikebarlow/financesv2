@@ -68069,6 +68069,8 @@ __webpack_require__(/*! ./edit-budget */ "./resources/js/components/edit-budget.
 
 __webpack_require__(/*! ./start-sheet */ "./resources/js/components/start-sheet.js");
 
+__webpack_require__(/*! ./end-sheet */ "./resources/js/components/end-sheet.js");
+
 __webpack_require__(/*! ./view-sheet */ "./resources/js/components/view-sheet.js");
 
 /***/ }),
@@ -68167,6 +68169,87 @@ Vue.component('edit-budget', {
     },
     deleteRow: function deleteRow(key) {
       this.budget.rows.splice(key, 1);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/end-sheet.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/end-sheet.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+Vue.component('end-sheet', {
+  props: ['accountid'],
+  mixins: [__webpack_require__(/*! ./../mixins/alerts */ "./resources/js/mixins/alerts.js"), __webpack_require__(/*! ./../mixins/processing */ "./resources/js/mixins/processing.js")],
+  data: function data() {
+    return {
+      account: {},
+      end_date: ''
+    };
+  },
+  created: function created() {
+    var parent = this;
+    this.getAccount();
+    $(document).ready(function () {
+      $('.datepicker').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'yy-mm-dd',
+        firstDay: 1,
+        onClose: function onClose(dateText, obj) {
+          parent.$set(parent, 'end_date', dateText);
+        }
+      });
+    });
+  },
+  methods: {
+    getAccount: function getAccount() {
+      var _this = this;
+
+      var parent = this;
+      axios.get(route('api.accounts.get', {
+        id: this.accountid
+      })).then(function (response) {
+        if (response.status == 200) {
+          _this.account = response.data.account;
+        } else {
+          parent.dangerAlert('There was a problem loading the account');
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the account');
+      });
+    },
+    saveSheet: function saveSheet(event) {
+      var _this2 = this;
+
+      this.processing($(event.target), true);
+      var parent = this;
+      var formData = {
+        sheet: {
+          account_id: this.accountid,
+          end_date: this.end_date
+        }
+      };
+      axios.post(route('api.sheets.complete'), JSON.parse(JSON.stringify(formData))).then(function (response) {
+        if (response.status === 201) {
+          parent.successAlert(response.data.msg);
+          setTimeout(function () {
+            window.location = response.data.redirect;
+          }, 2000);
+        } else {
+          _this2.stopProcessing($(event.target));
+
+          parent.dangerAlert(response.data.error[0]);
+        }
+      }, function (error) {
+        _this2.stopProcessing($(event.target));
+
+        parent.dangerAlert('There was a problem creating the sheet.');
+      });
     }
   }
 });
@@ -68393,13 +68476,60 @@ Vue.component('view-sheet', {
         payment: {
           row: 0,
           amount: 0.00
+        },
+        transfer: {
+          from_account: 0,
+          from_row_select: [],
+          from_row: 0,
+          from_label: '',
+          to_account: 0,
+          to_row_select: [],
+          to_row: 0,
+          to_label: '',
+          amount: 0.00
         }
       },
       payment: {
         row: 0,
         amount: 0.00
-      }
+      },
+      transfer: {
+        from_account: 0,
+        from_row_select: [],
+        from_row: 0,
+        from_label: '',
+        to_account: 0,
+        to_row_select: [],
+        to_row: 0,
+        to_label: '',
+        amount: 0.00
+      },
+      rowCache: {}
     };
+  },
+  watch: {
+    "transfer.from_account": function transferFrom_account(sheetId) {
+      if (sheetId != 'other') {
+        if (typeof this.rowCache[sheetId] == 'undefined') {
+          this.getAccountRows(sheetId, 'from_row_select');
+        } else {
+          this.transfer.from_row_select = this.rowCache[sheetId];
+        }
+      } else {
+        this.transfer.from_row = 0;
+      }
+    },
+    "transfer.to_account": function transferTo_account(sheetId) {
+      if (sheetId != 'other') {
+        if (typeof this.rowCache[sheetId] == 'undefined') {
+          this.getAccountRows(sheetId, 'to_row_select');
+        } else {
+          this.transfer.to_row_select = this.rowCache[sheetId];
+        }
+      } else {
+        this.transfer.to_row = 0;
+      }
+    }
   },
   created: function created() {
     var parent = this;
@@ -68424,6 +68554,23 @@ Vue.component('view-sheet', {
         parent.dangerAlert('Something went wrong when attempting to load the account');
       });
     },
+    getAccountRows: function getAccountRows(sheetId, rows) {
+      var parent = this;
+      axios.get(route('api.sheets.rows', {
+        id: sheetId
+      })).then(function (response) {
+        if (response.status == 200) {
+          parent.$set(parent.transfer, rows, response.data.rows);
+          parent.$set(parent.rowCache, sheetId, response.data.rows);
+        } else {
+          parent.dangerAlert('There was a problem loading the account');
+          return [];
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the account');
+        return [];
+      });
+    },
     getTransactions: function getTransactions() {
       var _this2 = this;
 
@@ -68440,8 +68587,26 @@ Vue.component('view-sheet', {
         parent.dangerAlert('Something went wrong when attempting to load the transactions');
       });
     },
-    sendPayment: function sendPayment(event) {
+    deleteTransaction: function deleteTransaction(event, id) {
       var _this3 = this;
+
+      if (confirm('Are you sure?')) {
+        var parent = this;
+        axios.delete(route('api.transaction.delete', {
+          id: id
+        })).then(function (response) {
+          if (response.status === 200) {
+            _this3.getAccount();
+          } else {
+            parent.dangerAlert(response.data.error[0]);
+          }
+        }, function (error) {
+          parent.dangerAlert('There was a problem logging the payment.');
+        });
+      }
+    },
+    sendPayment: function sendPayment(event) {
+      var _this4 = this;
 
       this.processing($(event.target), true);
       var parent = this;
@@ -68451,20 +68616,55 @@ Vue.component('view-sheet', {
       };
       axios.post(route('api.sheets.payment'), JSON.parse(JSON.stringify(formData))).then(function (response) {
         if (response.status === 201) {
-          _this3.payment = JSON.parse(JSON.stringify(_this3.defaults.payment));
+          _this4.payment = JSON.parse(JSON.stringify(_this4.defaults.payment));
 
-          _this3.getAccount();
+          _this4.getAccount();
 
-          _this3.stopProcessing($(event.target));
+          _this4.stopProcessing($(event.target));
         } else {
-          _this3.stopProcessing($(event.target));
+          _this4.stopProcessing($(event.target));
 
           parent.dangerAlert(response.data.error[0]);
         }
       }, function (error) {
-        _this3.stopProcessing($(event.target));
+        _this4.stopProcessing($(event.target));
 
         parent.dangerAlert('There was a problem logging the payment.');
+      });
+    },
+    sendTransfer: function sendTransfer(event) {
+      var _this5 = this;
+
+      this.processing($(event.target), true);
+      var parent = this;
+      var formData = {
+        sheet_id: this.account.latest.id,
+        transfer: {
+          fromSheet: this.transfer.from_account,
+          from: this.transfer.from_row,
+          fromLabel: this.transfer.from_label,
+          toSheet: this.transfer.to_account,
+          to: this.transfer.to_row,
+          toLabel: this.transfer.to_label,
+          amount: this.transfer.amount
+        }
+      };
+      axios.post(route('api.sheets.transfer'), JSON.parse(JSON.stringify(formData))).then(function (response) {
+        if (response.status === 201) {
+          _this5.transfer = JSON.parse(JSON.stringify(_this5.defaults.transfer));
+
+          _this5.getAccount();
+
+          _this5.stopProcessing($(event.target));
+        } else {
+          _this5.stopProcessing($(event.target));
+
+          parent.dangerAlert(response.data.error[0]);
+        }
+      }, function (error) {
+        _this5.stopProcessing($(event.target));
+
+        parent.dangerAlert('There was a problem logging the transfer.');
       });
     }
   }

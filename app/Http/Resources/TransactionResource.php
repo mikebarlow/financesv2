@@ -20,8 +20,9 @@ class TransactionResource extends JsonResource
 
         if ($this->type == 'payment') {
             $label = 'Payment From ' . $this->from_label;
+        } elseif ($this->type == 'transfer') {
+            $label = 'Transfer from ' . $this->from_label . ' to ' . $this->to_label;
         }
-
 
         return [
             'id' => $this->id,

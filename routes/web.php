@@ -56,5 +56,8 @@ $router->group(
 
         $router->get('/accounts/{id}/start', Accounts\StartAccountController::class)
             ->name('accounts.start');
+
+        $router->get('/accounts/{id}/complete-sheet', Accounts\CompleteSheetController::class)
+            ->name('accounts.complete-sheet');
     }
 );
