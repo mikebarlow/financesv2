@@ -11,7 +11,8 @@ Vue.component('start-sheet', {
             rows: {},
             bfRows: {},
             budgettotal: 0,
-            bftotal: 0
+            bftotal: 0,
+            grandTotal: 0
         }
     },
     watch: {
@@ -23,6 +24,7 @@ Vue.component('start-sheet', {
                     total += parseFloat(rows[key].amount.replace(/,/g, ''));
                 }
                 this.budgettotal = total;
+                this.grandTotal = this.budgettotal + this.bftotal;
             },
             deep: true
         },
@@ -34,6 +36,7 @@ Vue.component('start-sheet', {
                     bftotal += parseFloat(bfRows[key].amount.replace(/,/g, ''));
                 }
                 this.bftotal = bftotal;
+                this.grandTotal = this.budgettotal + this.bftotal;
             },
             deep: true
         }
@@ -66,10 +69,18 @@ Vue.component('start-sheet', {
                             this.account = response.data.account;
                             this.rows = JSON.parse(JSON.stringify(this.account.budget.rows));
                             this.bfRows = JSON.parse(JSON.stringify(this.account.budget.rows));
+
                             for (var key in this.bfRows) {
                                 this.bfRows[key].amount = '0.00';
                             }
 
+                            if (typeof this.account.latest == 'object') {
+                                for (var key in this.account.latest.rows) {
+                                    var row = this.account.latest.rows[key];
+
+                                    this.bfRows[row.budget_id].amount = row.total;
+                                }
+                            }
                         } else {
                             parent.dangerAlert('There was a problem loading the account');
                         }

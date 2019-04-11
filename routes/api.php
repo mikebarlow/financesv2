@@ -59,7 +59,7 @@ Route::name('api.')
             $router->get('/sheets/{id}/transactions', Api\Sheets\GetTransactionsController::class)
                 ->name('sheets.transactions');
 
-            $router->post('/sheets/{id}/complete', Accounts\CompleteSheetController::class)
+            $router->post('/sheets/{id}/complete', Api\Sheets\CompleteSheetController::class)
                 ->name('sheets.complete');
 
             // --------------------

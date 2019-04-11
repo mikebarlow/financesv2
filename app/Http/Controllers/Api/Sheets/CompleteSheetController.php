@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Api\Sheets;
 
 use App\Budget;
 use App\Account;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CompleteSheetRequest;
 
 class CompleteSheetController extends Controller
 {
     /**
      *
-     * @param Request $request
+     * @param CompleteSheetRequest $request
      * @param int $id
      */
-    public function __invoke(Request $request, int $id)
+    public function __invoke(CompleteSheetRequest $request, int $id)
     {
         $account = Account::where('id', $id)
             ->with('latestSheet')
@@ -28,14 +29,35 @@ class CompleteSheetController extends Controller
         try {
             $sheet = $account->latestSheet;
 
-            $sheet->complete($request->request->get('end_date'));
+            $sheet->complete(
+                \Carbon\Carbon::parse(
+                    $request->request->get('end_date')
+                )
+            );
         } catch (\Exception $e) {
-            return back()
-                ->with('errorMsg', 'There was a problem completing the sheet');
+            return response()
+                ->json(
+                    [
+                        'error' => [
+                            'There was a problem completing the sheet',
+                            $e->getMessage(),
+                        ]
+                    ]
+                )
+                ->setStatusCode(
+                    Response::HTTP_BAD_REQUEST
+                );
         }
 
-        return redirect()
-            ->route('accounts.start', ['id' => $account->id])
-            ->with('successMsg', 'Sheet Completed, Start next Sheet');
+        return response()
+            ->json(
+                [
+                    'msg' => 'Sheet Completed, redirecting...',
+                    'redirect' => route('accounts.start', ['id' => $sheet->account->id]),
+                ]
+            )
+            ->setStatusCode(
+                Response::HTTP_OK
+            );
     }
 }

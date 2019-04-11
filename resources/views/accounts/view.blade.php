@@ -41,9 +41,15 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="7">
-                                        <a href="{{ route('accounts.complete-sheet', ['id' => $account->id]) }}" onclick="return confirm('Are you sure');" class="d-print-none btn btn-success btn-block">
-                                            Complete Sheet
-                                        </a>
+                                        <form class="form-inline">
+
+                                            <label>Sheet Completed On</label>
+                                            <input type="text" name="sheet_end" class="form-control datepicker mx-3" v-model="end_date">
+
+                                            <button class="d-print-none btn btn-success" @click.prevent="completeSheet">
+                                                Complete Sheet
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             </tfoot>

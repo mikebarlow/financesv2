@@ -30,6 +30,12 @@
                                     <th>Brought Forward</th>
                                 </tr>
                             </thead>
+                            <tfoot>
+                               <tr>
+                                    <th colspan="2">New Sheet Total:</th>
+                                    <td>&pound;@{{ grandTotal | currency(2) }}</td>
+                                </tr>
+                            </tfoot>
                             <tbody v-if="rows">
                                 <tr v-for="(row, key) in rows">
                                     <td>@{{ row.name }}</td>
