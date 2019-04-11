@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('db:backup --database=mysql --destination=dropboxv2 --destinationPath=`date +\%Y/%m-%d` --compression=gzip')
+            ->weekly();
     }
 
     /**

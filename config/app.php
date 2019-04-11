@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        BackupManager\Laravel\Laravel55ServiceProvider::class,
 
         /*
          * Application Service Providers...
