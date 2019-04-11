@@ -1,27 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Accounts;
+namespace App\Http\Controllers\Budgets;
 
 use App\User;
-use App\Account;
+use App\Budget;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CreateAccountFormController extends Controller
+class CreateBudgetController extends Controller
 {
     /**
-     *
      * @param Request $request
      */
     public function __invoke(Request $request)
     {
         return view(
-            'accounts.create',
+            'budgets.create',
             [
-                'budgets' => $request->user()
-                    ->budgets()
-                    ->orderBy('name', 'asc')
-                    ->get(),
                 'users' => User::get()
                     ->reject(
                         function ($user) use ($request) {

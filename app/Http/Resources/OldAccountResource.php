@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AccountResource extends JsonResource
+class OldAccountResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,7 +22,7 @@ class AccountResource extends JsonResource
                 'budget',
                 new BudgetResource($this->budget)
             ),
-            'latest' => new SheetResource($this->latestSheet),
+            'sheet' => new SheetResource($this->sheets->first()),
         ];
 
         return $return;

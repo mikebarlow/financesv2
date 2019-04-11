@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Accounts;
 
+use App\User;
 use App\Account;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAccountRequest;
@@ -15,15 +16,24 @@ class CreateAccountController extends Controller
     public function __invoke(CreateAccountRequest $request)
     {
         $user = $request->user();
+        $share = $request->request->get('share', false);
 
         $account = new Account([
             'name' => $request->request->get('name'),
             'budget_id' => $request->request->get('budget_id'),
         ]);
 
+        $shareWith = User::where('id', '!=', $user->id)
+            ->first();
+
         try {
-            $user->accounts()
+            $account = $user->accounts()
                 ->save($account);
+
+            if ($share) {
+                $shareWith->accounts()
+                    ->attach($account->id);
+            }
         } catch (\Exception $e) {
             return back()
                 ->with([

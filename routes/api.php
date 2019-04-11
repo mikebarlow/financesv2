@@ -42,6 +42,9 @@ Route::name('api.')
             $router->get('/accounts/{id}/latest', Api\Accounts\GetLatestSheetController::class)
                 ->name('accounts.get.latest');
 
+            $router->get('/accounts/{id}/old-sheet/{sheetId}', Api\Accounts\GetOldSheetController::class)
+                ->name('accounts.get.old');
+
             // --------------------
             // sheets
             $router->get('/sheets/{id}/rows', Api\Sheets\GetRowsController::class)

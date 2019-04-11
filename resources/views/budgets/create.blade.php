@@ -23,7 +23,16 @@
                                 <input type="text" name="budget-name" class="form-control" v-model="budget.name">
                             </div>
 
-                            <table class="table table-striped">
+                            @foreach ($users as $user)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" v-model="share" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Share budget with {{ $user->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+
+                            <table class="mt-4 table table-striped">
                                 <thead>
                                     <tr>
                                         <th>Label</th>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Budgets;
 
+use App\User;
 use App\Budget;
 use App\Money\Parser;
 use Illuminate\Support\Str;
@@ -27,6 +28,7 @@ class CreateBudgetController extends Controller
     public function __invoke(CreateBudgetRequest $request)
     {
         $data = $request->request->get('budget');
+        $share = $request->request->get('share', false);
         $user = $request->user();
 
         $rows = collect($data['rows'])
@@ -48,9 +50,17 @@ class CreateBudgetController extends Controller
             'sheet_rows' => \GuzzleHttp\json_encode($rows),
         ]);
 
+        $shareWith = User::where('id', '!=', $user->id)
+            ->first();
+
         try {
-            $user->budgets()
+            $budget = $user->budgets()
                 ->save($budget);
+
+            if ($share) {
+                $shareWith->budgets()
+                    ->attach($budget->id);
+            }
         } catch (\Exception $e) {
             return response()
                 ->json(

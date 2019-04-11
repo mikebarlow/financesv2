@@ -13,7 +13,8 @@ Vue.component('new-budget', {
                 name: '',
                 amount: ''
             },
-            total: 0
+            total: 0,
+            share: false
         }
     },
     watch: {
@@ -45,7 +46,8 @@ Vue.component('new-budget', {
             var parent = this;
 
             var formData = {
-                budget: this.budget
+                budget: this.budget,
+                share: this.share
             };
 
             axios.post(

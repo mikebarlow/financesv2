@@ -74,7 +74,7 @@ Vue.component('start-sheet', {
                                 this.bfRows[key].amount = '0.00';
                             }
 
-                            if (typeof this.account.latest == 'object') {
+                            if (this.account.latest != null) {
                                 for (var key in this.account.latest.rows) {
                                     var row = this.account.latest.rows[key];
 

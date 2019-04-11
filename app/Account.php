@@ -18,7 +18,8 @@ class Account extends Model
 
     public function sheets()
     {
-        return $this->hasMany(Sheet::class);
+        return $this->hasMany(Sheet::class)
+            ->latest();
     }
 
     public function latestSheet()

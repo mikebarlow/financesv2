@@ -18,6 +18,7 @@
                     <div class="card-header">
                         <div class="pull-left d-inline-block">
                             Sheet Beginning: {{ $account->latestSheet->start_date->format('jS M Y') }}
+                            (<a href="{{ route('accounts.list-old-sheets', ['id' => $account->id]) }}">View older sheets</a>)
                         </div>
 
                         <button type="submit" class="d-print-none btn-card btn-card-right btn-danger float-right" onclick="javascript: window.print()">
@@ -38,7 +39,7 @@
                                     <th>Total</th>
                                 </tr>
                             </thead>
-                            <tfoot>
+                            <tfoot class="d-print-none">
                                 <tr>
                                     <td colspan="7">
                                         <form class="form-inline">

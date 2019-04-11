@@ -33,6 +33,15 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        @foreach ($users as $user)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" name="share" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Share account with {{ $user->name }}
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </form>

@@ -68071,6 +68071,8 @@ __webpack_require__(/*! ./start-sheet */ "./resources/js/components/start-sheet.
 
 __webpack_require__(/*! ./view-sheet */ "./resources/js/components/view-sheet.js");
 
+__webpack_require__(/*! ./view-old-sheet */ "./resources/js/components/view-old-sheet.js");
+
 /***/ }),
 
 /***/ "./resources/js/components/edit-budget.js":
@@ -68192,7 +68194,8 @@ Vue.component('new-budget', {
         name: '',
         amount: ''
       },
-      total: 0
+      total: 0,
+      share: false
     };
   },
   watch: {
@@ -68224,7 +68227,8 @@ Vue.component('new-budget', {
       this.processing($(event.target), true);
       var parent = this;
       var formData = {
-        budget: this.budget
+        budget: this.budget,
+        share: this.share
       };
       axios.post(route('api.budgets.create'), JSON.parse(JSON.stringify(formData))).then(function (response) {
         if (response.status === 201) {
@@ -68257,8 +68261,6 @@ Vue.component('new-budget', {
   \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 Vue.component('start-sheet', {
   props: ['accountid'],
@@ -68334,7 +68336,7 @@ Vue.component('start-sheet', {
             _this.bfRows[key].amount = '0.00';
           }
 
-          if (_typeof(_this.account.latest) == 'object') {
+          if (_this.account.latest != null) {
             for (var key in _this.account.latest.rows) {
               var row = _this.account.latest.rows[key];
               _this.bfRows[row.budget_id].amount = row.total;
@@ -68375,6 +68377,53 @@ Vue.component('start-sheet', {
         _this2.stopProcessing($(event.target));
 
         parent.dangerAlert('There was a problem creating the sheet.');
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/view-old-sheet.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/view-old-sheet.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+Vue.component('view-old-sheet', {
+  props: ['accountid', 'sheetid'],
+  mixins: [__webpack_require__(/*! ./../mixins/alerts */ "./resources/js/mixins/alerts.js"), __webpack_require__(/*! ./../mixins/processing */ "./resources/js/mixins/processing.js")],
+  data: function data() {
+    return {
+      account: {
+        sheet: {
+          rows: [],
+          totals: {}
+        }
+      }
+    };
+  },
+  created: function created() {
+    var parent = this;
+    this.getAccount();
+  },
+  methods: {
+    getAccount: function getAccount() {
+      var _this = this;
+
+      var parent = this;
+      axios.get(route('api.accounts.get.old', {
+        id: this.accountid,
+        sheetId: this.sheetid
+      })).then(function (response) {
+        if (response.status == 200) {
+          _this.account = response.data.account;
+        } else {
+          parent.dangerAlert('There was a problem loading the account');
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the account');
       });
     }
   }

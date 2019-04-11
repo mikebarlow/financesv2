@@ -28,7 +28,9 @@
                             @forelse($accounts as $account)
                                 <tr>
                                     <td>{{ $account->name }}</td>
-                                    <td>--</td>
+                                    <td>
+                                        {{ $account->latestSheet !== null ? $account->latestSheet->start_date->format('jS M Y') : '--' }}
+                                    </td>
                                     <td>
                                         @if ($account->latestSheet !== null)
                                             <a href="{{ route('accounts.view', ['id' => $account->id]) }}" class="btn btn-success pull-left mr-3">View</a>

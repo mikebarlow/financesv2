@@ -14,24 +14,26 @@
 use Illuminate\Routing\Router;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('accounts.list');
 });
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 $router->group(
     [
         'middleware' => ['auth',],
     ],
     function (Router $router) {
+        $router->get('/home', function () {
+            return redirect()->route('accounts.list');
+        });
+
         // --------------------
         // budgets
         $router->get('/budgets', Budgets\ListBudgetsController::class)
             ->name('budgets.list');
 
-        $router->view('/budgets/create', 'budgets.create')
+        $router->get('/budgets/create', Budgets\CreateBudgetController::class)
             ->name('budgets.create');
 
         $router->delete('/budgets/{id}', Budgets\DeleteBudgetController::class)
@@ -56,5 +58,11 @@ $router->group(
 
         $router->get('/accounts/{id}/start', Accounts\StartAccountController::class)
             ->name('accounts.start');
+
+        $router->get('/accounts/{id}/old-sheets', Accounts\ListOldSheetsController::class)
+            ->name('accounts.list-old-sheets');
+
+        $router->get('/accounts/{id}/old-sheets/{sheetId}', Accounts\ViewOldSheetController::class)
+            ->name('accounts.view-old-sheet');
     }
 );
