@@ -31,7 +31,7 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody v-if="budget.rows.length > 0">
+                                <tbody v-if="budget.rows">
                                     <tr v-for="(row, key) in budget.rows">
                                         <td>@{{ row.name }}</td>
                                         <td>&pound;@{{ row.amount | currency(2) }}</td>
