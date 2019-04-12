@@ -68130,7 +68130,7 @@ Vue.component('edit-budget', {
       });
     },
     addRow: function addRow() {
-      if (this.newRow.name != '' && this.newRow.amount > 0) {
+      if (this.newRow.name != '') {
         this.budget.rows.push(this.newRow);
         this.newRow = {
           name: '',
@@ -68211,7 +68211,7 @@ Vue.component('new-budget', {
   },
   methods: {
     addRow: function addRow() {
-      if (this.newRow.name != '' && this.newRow.amount > 0) {
+      if (this.newRow.name != '') {
         this.budget.rows.push(this.newRow);
         this.newRow = {
           name: '',
