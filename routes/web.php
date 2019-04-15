@@ -64,5 +64,13 @@ $router->group(
 
         $router->get('/accounts/{id}/old-sheets/{sheetId}', Accounts\ViewOldSheetController::class)
             ->name('accounts.view-old-sheet');
+
+        // --------------------
+        // mass transfers
+        $router->get('/accounts/{id}/mass-transfers', Accounts\ManageMassTransfersController::class)
+            ->name('accounts.mass-transfers');
+
+        $router->get('/accounts/{id}/mass-transfers/create', Accounts\MassTransfers\CreateController::class)
+            ->name('accounts.masstransfers.create');
     }
 );

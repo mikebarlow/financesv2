@@ -16,6 +16,11 @@ class Account extends Model
         return $this->belongsTo(Budget::class);
     }
 
+    public function massTransfers()
+    {
+        return $this->hasMany(MassTransfer::class);
+    }
+
     public function sheets()
     {
         return $this->hasMany(Sheet::class)

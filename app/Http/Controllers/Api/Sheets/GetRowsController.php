@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Sheets;
 
+use App\Sheet;
 use App\SheetRow;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,10 +21,15 @@ class GetRowsController extends Controller
         $rows = SheetRow::where('sheet_id', $id)
             ->get();
 
+        $sheet = Sheet::with('account')
+            ->where('id', $id)
+            ->first();
+
         return response()
             ->json(
                 [
                     'rows' => SheetRowResource::collection($rows),
+                    'accountName' => $sheet->account->name,
                 ]
             )
             ->setStatusCode(

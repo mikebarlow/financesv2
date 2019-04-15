@@ -45,6 +45,13 @@ Route::name('api.')
             $router->get('/accounts/{id}/old-sheet/{sheetId}', Api\Accounts\GetOldSheetController::class)
                 ->name('accounts.get.old');
 
+
+            // --------------------
+            // mass transfers
+            $router->post('/mass-transfers/create', Api\MassTransfers\CreateTransferController::class)
+                ->name('masstransfers.create');
+
+
             // --------------------
             // sheets
             $router->get('/sheets/{id}/rows', Api\Sheets\GetRowsController::class)
