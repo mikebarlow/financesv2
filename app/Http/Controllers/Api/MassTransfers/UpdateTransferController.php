@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
-class CreateTransferController extends Controller
+class UpdateTransferController extends Controller
 {
     protected $moneyParser;
 
@@ -25,14 +25,20 @@ class CreateTransferController extends Controller
 
     /**
      * @param Request $request
+     * @param int $id
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, int $id)
     {
         $data = $request->request->get('transfer');
         $sheetId = $request->request->get('sheetId');
         $account = Sheet::with('account')
             ->where('id', $sheetId)
             ->first()->account;
+
+        $transfer = MassTransfer::where('id', $id)
+            ->first();
+
+        $transfer->name = $data['name'];
 
         $rows = collect($data['rows'])
             ->map(
@@ -54,14 +60,10 @@ class CreateTransferController extends Controller
             )
             ->toArray();
 
-        $transfer = new MassTransfer([
-            'name' => $data['name'],
-            'transfers' => \GuzzleHttp\json_encode($rows),
-        ]);
+        $transfer->transfers = \GuzzleHttp\json_encode($rows);
 
         try {
-            $transfer = $account->massTransfers()
-                ->save($transfer);
+            $transfer->save();
         } catch (\Exception $e) {
             return response()
                 ->json(
@@ -81,7 +83,7 @@ class CreateTransferController extends Controller
         return response()
             ->json(
                 [
-                    'msg' => 'Mass Transfer created, redirecting...',
+                    'msg' => 'Mass Transfer updated, redirecting...',
                     'redirect' => route('accounts.view', ['id' => $account->id]),
                 ]
             )

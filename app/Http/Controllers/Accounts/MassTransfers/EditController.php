@@ -1,21 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Accounts;
+namespace App\Http\Controllers\Accounts\MassTransfers;
 
+use App\Budget;
 use App\Account;
+use App\MassTransfer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AccountResource;
 
-class ViewAccountController extends Controller
+class EditController extends Controller
 {
     /**
      *
      * @param Request $request
-     * @param int $accountId
+     * @param int $id
+     * @param int $transferId
      */
-    public function __invoke(Request $request, int $id)
+    public function __invoke(Request $request, int $id, int $transferId)
     {
-        $account = Account::with(['latestSheet', 'massTransfers'])
+        $account = Account::with(['budget', 'latestSheet'])
             ->where('id', $id)
             ->whereHas(
                 'users',
@@ -33,11 +37,16 @@ class ViewAccountController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
+        $transfer = MassTransfer::where('id', $transferId)
+            ->first();
+
         return view(
-            'accounts.view',
+            'accounts.masstransfers.edit',
             [
                 'account' => $account,
                 'allAccounts' => $allAccounts,
+                'transfer' => $transfer,
+                'budgetRows' => Budget::outputRows($account->budget->sheet_rows),
             ]
         );
     }

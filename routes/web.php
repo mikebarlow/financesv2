@@ -72,5 +72,11 @@ $router->group(
 
         $router->get('/accounts/{id}/mass-transfers/create', Accounts\MassTransfers\CreateController::class)
             ->name('accounts.masstransfers.create');
+
+        $router->get('/accounts/{id}/mass-transfers/{transferId}/edit', Accounts\MassTransfers\EditController::class)
+            ->name('accounts.masstransfers.edit');
+
+        $router->get('/accounts/{id}/mass-transfers/{transferId}/delete', Accounts\MassTransfers\DeleteController::class)
+            ->name('accounts.masstransfers.delete');
     }
 );

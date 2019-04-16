@@ -32,9 +32,9 @@
                                 <tr>
                                     <td>{{ $transfer->name }}</td>
                                     <td>
-                                        <a href="{{ route('accounts.masstransfers.edit', ['id' => $transfer->id]) }}" class="btn btn-primary pull-left mr-3">Edit</a>
+                                        <a href="{{ route('accounts.masstransfers.edit', ['id' => $account->id, 'transferId' => $transfer->id]) }}" class="btn btn-primary pull-left mr-3">Edit</a>
 
-                                        <a href="{{ route('accounts.masstransfers.delete', ['id' => $transfer->id]) }}" class="btn btn-danger pull-left mr-3" onclick="return confirm('Are you sure?');">Delete</a>
+                                        <a href="{{ route('accounts.masstransfers.delete', ['id' => $account->id, 'transferId' => $transfer->id]) }}" class="btn btn-danger pull-left mr-3" onclick="return confirm('Are you sure?');">Delete</a>
                                     </td>
                                 </tr>
                             @empty

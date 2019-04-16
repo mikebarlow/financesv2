@@ -266,6 +266,35 @@ Vue.component('view-sheet', {
                     parent.dangerAlert('There was a problem completing the sheet.');
                 }
             );
+        },
+        sendMassTransfer: function (id) {
+            if (confirm('Are you sure?')) {
+                var parent = this;
+
+                var formData = {
+                    sheet_id: this.account.latest.id,
+                    mass_transfer_id: id
+                };
+
+                axios.post(
+                    route('api.sheets.masstransfer'),
+                    JSON.parse(JSON.stringify(formData))
+                )
+                .then(
+                    (response) => {
+                        if (response.status === 201) {
+                            this.getAccount();
+                        } else {
+                            parent.dangerAlert(response.data.error[0]);
+                        }
+                    },
+                    (error) => {
+                        this.stopProcessing($(event.target));
+                        parent.dangerAlert('There was a problem logging the transfer.');
+                    }
+                );
+
+            }
         }
     }
 });

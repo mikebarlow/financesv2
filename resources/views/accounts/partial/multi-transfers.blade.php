@@ -8,8 +8,15 @@
             </a>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-0">
+            <div class="list-group">
+                @foreach ($account->massTransfers as $transfer)
+                    <button class="list-group-item list-group-item-action" @click.prevent="sendMassTransfer('{{ $transfer->id }}')">
+                        {{ $transfer->name }}
+                    </button>
+                @endforeach
 
+            </div>
         </div>
     </div>
 </div>

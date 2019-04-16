@@ -51,6 +51,11 @@ Route::name('api.')
             $router->post('/mass-transfers/create', Api\MassTransfers\CreateTransferController::class)
                 ->name('masstransfers.create');
 
+            $router->get('/mass-transfers/{id}', Api\MassTransfers\GetTransferController::class)
+                ->name('masstransfers.get');
+
+            $router->post('/mass-transfers/{id}', Api\MassTransfers\UpdateTransferController::class)
+                ->name('masstransfers.update');
 
             // --------------------
             // sheets
@@ -65,6 +70,9 @@ Route::name('api.')
 
             $router->post('/sheets/transfer', Api\Sheets\MakeTransferController::class)
                 ->name('sheets.transfer');
+
+            $router->post('/sheets/mass-transfer', Api\Sheets\MakeMassTransferController::class)
+                ->name('sheets.masstransfer');
 
             $router->get('/sheets/{id}/transactions', Api\Sheets\GetTransactionsController::class)
                 ->name('sheets.transactions');

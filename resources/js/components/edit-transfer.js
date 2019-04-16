@@ -1,5 +1,5 @@
-Vue.component('new-transfer', {
-    props: ['sheetid'],
+Vue.component('edit-transfer', {
+    props: ['sheetid', 'transferid'],
     mixins: [
         require('./../mixins/alerts'),
         require('./../mixins/processing')
@@ -50,9 +50,30 @@ Vue.component('new-transfer', {
     created: function() {
         var parent = this;
         this.getAccountRows(this.sheetid, '');
+        this.getTransfer();
     },
 
     methods: {
+        getTransfer: function () {
+            var parent = this;
+
+            axios.get(route('api.masstransfers.get', {id: this.transferid}))
+                .then(
+                    (response) => {
+                        if (response.status == 200) {
+                            this.transfer = response.data.transfer;
+                        } else {
+                            parent.dangerAlert('There was a problem loading the transfers');
+                        }
+                    },
+                    (error) => {
+                        console.log(error);
+
+                        parent.dangerAlert('Something went wrong when attempting to load the transfers');
+                    }
+                );
+        },
+
         getAccountRows: function (sheetId, rows) {
             var parent = this;
 
@@ -122,7 +143,7 @@ Vue.component('new-transfer', {
             };
 
             axios.post(
-                route('api.masstransfers.create'),
+                route('api.masstransfers.update', {id: this.transferid}),
                 JSON.parse(JSON.stringify(formData))
             )
             .then(
