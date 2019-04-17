@@ -107,7 +107,7 @@
                         </div>
                     </div>
 
-                    <div class="card-body p-0">
+                    <div class="card-body p-0" style="height: 500px; overflow-y: scroll;">
                         <table class="table table-striped mb-0">
                             <thead class="thead-dark">
                                 <tr>
