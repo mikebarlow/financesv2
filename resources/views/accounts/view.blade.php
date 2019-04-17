@@ -65,23 +65,23 @@
                             <tbody v-if="account">
                                 <tr v-for="row in account.latest.rows">
                                     <th>@{{ row.label }}</th>
-                                    <td>&pound;@{{ row.budget }}</td>
-                                    <td>&pound;@{{ row.broughtForward }}</td>
-                                    <td>&pound;@{{ row.payments }}</td>
-                                    <td>&pound;@{{ row.transIn }}</td>
-                                    <td>&pound;@{{ row.transOut }}</td>
-                                    <td>&pound;@{{ row.total }}</td>
+                                    <td>&pound;@{{ row.budget | currency(2)}}</td>
+                                    <td>&pound;@{{ row.broughtForward | currency(2) }}</td>
+                                    <td>&pound;@{{ row.payments | currency(2) }}</td>
+                                    <td>&pound;@{{ row.transIn | currency(2) }}</td>
+                                    <td>&pound;@{{ row.transOut | currency(2) }}</td>
+                                    <td>&pound;@{{ row.total | currency(2) }}</td>
                                 </tr>
 
                                 <tr>
                                     <th>Totals</th>
-                                    <td>&pound;@{{ account.latest.totals.budget }}</td>
-                                    <td>&pound;@{{ account.latest.totals.broughtForward }}</td>
-                                    <td>&pound;@{{ account.latest.totals.payments }}</td>
-                                    <td>&pound;@{{ account.latest.totals.transIn }}</td>
-                                    <td>&pound;@{{ account.latest.totals.transOut }}</td>
+                                    <td>&pound;@{{ account.latest.totals.budget | currency(2) }}</td>
+                                    <td>&pound;@{{ account.latest.totals.broughtForward | currency(2) }}</td>
+                                    <td>&pound;@{{ account.latest.totals.payments | currency(2) }}</td>
+                                    <td>&pound;@{{ account.latest.totals.transIn | currency(2) }}</td>
+                                    <td>&pound;@{{ account.latest.totals.transOut | currency(2) }}</td>
                                     <td v-if="account.latest.totalsMatch" class="table-success">
-                                        &pound;@{{ account.latest.totals.totDown }}
+                                        &pound;@{{ account.latest.totals.totDown | currency(2) }}
                                     </td>
                                     <td v-else class="table-danger">
                                         A: &pound;@{{ account.latest.totals.totAcross }}<br>
