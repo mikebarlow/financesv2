@@ -10,7 +10,9 @@
         </div>
 
         <div class="row">
-            @include('alerts.main')
+            <div class="col">
+                @include('alerts.main')
+            </div>
         </div>
 
         <div class="row justify-content-center d-print-none">

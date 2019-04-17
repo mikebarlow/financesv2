@@ -68864,6 +68864,11 @@ Vue.component('view-sheet', {
     },
     getAccountRows: function getAccountRows(sheetId, rows) {
       var parent = this;
+
+      if (sheetId == 0) {
+        return;
+      }
+
       axios.get(route('api.sheets.rows', {
         id: sheetId
       })).then(function (response) {

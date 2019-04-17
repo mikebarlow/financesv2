@@ -112,6 +112,10 @@ Vue.component('view-sheet', {
         getAccountRows: function (sheetId, rows) {
             var parent = this;
 
+            if (sheetId == 0) {
+                return;
+            }
+
             axios.get(route('api.sheets.rows', {id: sheetId}))
                 .then(
                     (response) => {
