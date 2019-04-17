@@ -84,6 +84,9 @@
                                     <select class="form-control" v-model="newRow.to_account">
                                         <option value="0">Select Account To</option>
                                         @foreach ($allAccounts as $account)
+                                            @if ($account->latestSheet === null)
+                                                @continue
+                                            @endif
                                             <option value="{{ $account->latestSheet->id }}">
                                                 {{ $account->name}}
                                             </option>
