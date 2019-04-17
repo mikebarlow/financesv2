@@ -4,6 +4,12 @@
 <view-sheet :accountid="{{ $account->id }}" inline-template>
     <div class="container">
         <div class="row">
+            <div class="col">
+                <h1>{{ $account->name }}</h1>
+            </div>
+        </div>
+
+        <div class="row">
             @include('alerts.main')
         </div>
 
