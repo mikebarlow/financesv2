@@ -68135,7 +68135,8 @@ Vue.component('edit-budget', {
     },
     addRow: function addRow() {
       if (this.newRow.name != '') {
-        this.budget.rows.push(this.newRow);
+        // this.budget.rows.push(this.newRow);
+        this.$set(this.budget.rows, new Date().getTime(), this.newRow);
         this.newRow = {
           name: '',
           amount: ''
@@ -68172,7 +68173,7 @@ Vue.component('edit-budget', {
       });
     },
     deleteRow: function deleteRow(key) {
-      this.budget.rows.splice(key, 1);
+      this.$delete(this.budget.rows, key);
     }
   }
 });
