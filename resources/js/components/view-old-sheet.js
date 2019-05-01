@@ -12,11 +12,13 @@ Vue.component('view-old-sheet', {
                     totals: {}
                 }
             },
+            transactions: [],
         }
     },
     created: function() {
         var parent = this;
         this.getAccount();
+        this.getTransactions();
     },
 
     methods: {
@@ -38,6 +40,23 @@ Vue.component('view-old-sheet', {
                     parent.dangerAlert('Something went wrong when attempting to load the account');
                 }
             );
+        },
+        getTransactions: function () {
+            var parent = this;
+
+            axios.get(route('api.sheets.transactions', {id: this.sheetid}))
+                .then(
+                    (response) => {
+                        if (response.status == 200) {
+                            this.transactions = response.data.transactions;
+                        } else {
+                            parent.dangerAlert('There was a problem loading the transactions');
+                        }
+                    },
+                    (error) => {
+                        parent.dangerAlert('Something went wrong when attempting to load the transactions');
+                    }
+                );
         },
     }
 });

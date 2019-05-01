@@ -70,6 +70,33 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-4 d-print-none">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="pull-left d-inline-block">
+                            Transactions
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0" style="height: 500px; overflow-y: scroll;">
+                        <table class="table table-striped mb-0">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="transaction in transactions">
+                                    <td>@{{ transaction.label }}</td>
+                                    <td>&pound;@{{ transaction.amount }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </view-old-sheet>

@@ -68720,12 +68720,14 @@ Vue.component('view-old-sheet', {
           rows: [],
           totals: {}
         }
-      }
+      },
+      transactions: []
     };
   },
   created: function created() {
     var parent = this;
     this.getAccount();
+    this.getTransactions();
   },
   methods: {
     getAccount: function getAccount() {
@@ -68743,6 +68745,22 @@ Vue.component('view-old-sheet', {
         }
       }, function (error) {
         parent.dangerAlert('Something went wrong when attempting to load the account');
+      });
+    },
+    getTransactions: function getTransactions() {
+      var _this2 = this;
+
+      var parent = this;
+      axios.get(route('api.sheets.transactions', {
+        id: this.sheetid
+      })).then(function (response) {
+        if (response.status == 200) {
+          _this2.transactions = response.data.transactions;
+        } else {
+          parent.dangerAlert('There was a problem loading the transactions');
+        }
+      }, function (error) {
+        parent.dangerAlert('Something went wrong when attempting to load the transactions');
       });
     }
   }
