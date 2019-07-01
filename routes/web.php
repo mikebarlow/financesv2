@@ -17,7 +17,9 @@ Route::get('/', function () {
     return redirect()->route('accounts.list');
 });
 
-Auth::routes(['register' => false, 'reset' => false,]);
+Auth::routes(
+    ['register' => false, 'reset' => false,]
+);
 
 $router->group(
     [

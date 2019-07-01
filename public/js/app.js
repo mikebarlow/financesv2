@@ -68099,7 +68099,8 @@ Vue.component('edit-budget', {
         name: '',
         amount: ''
       },
-      total: 0
+      total: 0,
+      deletedRows: []
     };
   },
   watch: {
@@ -68136,6 +68137,16 @@ Vue.component('edit-budget', {
     addRow: function addRow() {
       if (this.newRow.name != '') {
         // this.budget.rows.push(this.newRow);
+        var newLbl = this.newRow.name.toLowerCase();
+
+        for (var i in this.deletedRows) {
+          var oldLbl = this.deletedRows[i].name.toLowerCase();
+
+          if (newLbl === oldLbl) {
+            this.newRow.id = this.deletedRows[i].id;
+          }
+        }
+
         this.$set(this.budget.rows, new Date().getTime(), this.newRow);
         this.newRow = {
           name: '',
@@ -68173,6 +68184,7 @@ Vue.component('edit-budget', {
       });
     },
     deleteRow: function deleteRow(key) {
+      this.deletedRows.push(this.budget.rows[key]);
       this.$delete(this.budget.rows, key);
     }
   }
