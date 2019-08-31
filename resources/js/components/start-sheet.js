@@ -78,7 +78,9 @@ Vue.component('start-sheet', {
                                 for (var key in this.account.latest.rows) {
                                     var row = this.account.latest.rows[key];
 
-                                    this.bfRows[row.budget_id].amount = row.total;
+                                    if (typeof this.bfRows[row.budget_id] != 'undefined') {
+                                        this.bfRows[row.budget_id].amount = row.total;
+                                    }
                                 }
                             }
                         } else {

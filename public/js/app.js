@@ -68670,7 +68670,10 @@ Vue.component('start-sheet', {
           if (_this.account.latest != null) {
             for (var key in _this.account.latest.rows) {
               var row = _this.account.latest.rows[key];
-              _this.bfRows[row.budget_id].amount = row.total;
+
+              if (typeof _this.bfRows[row.budget_id] != 'undefined') {
+                _this.bfRows[row.budget_id].amount = row.total;
+              }
             }
           }
         } else {
